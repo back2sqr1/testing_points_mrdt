@@ -6,7 +6,7 @@ public:
   double y;
   Vector(double x, double y) {
     this->x = x;
-    this->y = x;
+    this->y = y;
   }
   double magnitude() { return std::sqrt(x * x + y * y); }
   void resize(double mag) {
@@ -16,6 +16,6 @@ public:
   }
 };
 inline std::ostream &operator<<(std::ostream &os, const Vector &v) {
-  os << "[" << v.x << ", " << v.y << " ]" << std::endl;
+  os << "[" << v.x << ", " << v.y << " ]";
   return os;
 }

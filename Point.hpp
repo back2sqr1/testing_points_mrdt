@@ -13,6 +13,9 @@ public:
     return std::sqrt((z.x - x) * (z.x - x) + (z.y - y) * (z.y - y));
   }
   Point midpoint(const Point &z) { return Point((x + z.x) / 2, (y + z.y) / 2); }
+  double max_of_dists(const Point &a, const Point &b) {
+    return std::max(dist(a), dist(b));
+  }
 };
 // --- Add this operator overload function here ---
 inline std::ostream &operator<<(std::ostream &os, const Point &p) {
