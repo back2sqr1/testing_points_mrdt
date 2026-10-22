@@ -1,12 +1,22 @@
 #include "Solver.hpp"
 #include <iostream>
 
-void print_answer(N *g) {
-  while (g != nullptr && !g->neighbors.empty()) {
-    std::cout << std::get<0>(g->value) << " ";
-    g = g->neighbors.front();
+// print tree
+void print_answer(N *g, int tabs = 0) {
+  if (g == nullptr) {
+    return;
   }
-  std::cout << std::get<0>(g->value) << "\n";
+
+  auto [pt, dist] = g->value;
+  for (int i = 0; i < tabs; i++) {
+    std::cout << "\t";
+  }
+  std::cout << "|--> (" << pt << ", " << dist << ")\n";
+
+  for (auto &x : g->neighbors) {
+    auto [pt, dist] = x->value;
+    print_answer(x, tabs + 1);
+  }
 }
 
 int main() {
@@ -35,9 +45,4 @@ int main() {
   g.addEdge(s_node, c_node);
 
   Graph::Graph<std::tuple<Point, double>> sol_g;
-  N *ans = solver.solve_ff_tree(*s_node, sol_g);
-  auto [pt, dist] = ans->value;
-  std::cout << "ANSWER\n";
-  print_answer(ans);
-  std::cout << dist << "\n";
 }

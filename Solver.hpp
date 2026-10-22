@@ -1,6 +1,7 @@
 #include "Graph.hpp"
 #include "Line.hpp"
 #include "Vector.hpp"
+#include <cmath>
 #include <tuple>
 
 using Val = std::tuple<Point, double>;
@@ -13,7 +14,7 @@ public:
     Point b - biased
     Point nb - non-biased point
 
-    returns best point, max of dists
+    returns best point to move to, max of dists
   */
   const double TOLERANCE = 1e-9;
   Val forward_function(Point s, Point b, Point nb, double t) {
@@ -70,43 +71,6 @@ public:
       }
     }
     return {best_point, best_point.max_of_dists(b, nb)};
-  }
-
-  // solve forward function tree
-  // g is the graph and relationship between points to visit
-  // node is the current node
-  // times are the ints at each decision vertex (double t)
-  // s is the start point
-  // node = {s, time}
-  // its children are the ones to use the forward function for
-  N *solve_ff_tree(N &node, Graph::Graph<Val> &solution_graph) {
-    // if no children
-
-    N *first = solution_graph.addNode({std::get<0>(node.value), 0});
-    if (node.neighbors.size() == 0) {
-      return first;
-    }
-    auto [s, t] = node.value;
-
-    // go through neighbors and add times
-    std::vector<N *> children;
-    for (auto &p : node.neighbors) {
-      N *child = solve_ff_tree(*p, solution_graph);
-      children.emplace_back(child);
-    }
-
-    // how to add distances?
-    Val ff = forward_function(s, std::get<0>(children[0]->value),
-                              std::get<0>(children[1]->value), t);
-    // adding dists
-    std::get<1>(ff) +=
-        std::get<1>(children[0]->value) + std::get<1>(children[1]->value);
-
-    N x(ff);
-    N *second = solution_graph.addNode(ff);
-    solution_graph.addEdge(first, second);
-
-    return second;
   }
 
 private:
